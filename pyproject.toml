@@ -1,0 +1,44 @@
+
+[project]
+name = "naan_model"
+authors = [
+    {name = "Dave Vieglais", email = "605409+datadavev@users.noreply.github.com"},
+]
+description = "The ARK identifier NAAN model used by the registry and resolver services."
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["NAAN", "ARK", "identifier", "PID"]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "pydantic",
+    "json-schema-for-humans",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+
+[project.scripts]
+naandocs = "naan_model.generate_docs:main"
+[tool.poetry]
+name = "naan-model"
+version = "0.1.0"
+description = "The ARK identifier NAAN model used by the registry and resolver services."
+authors = ["datadave <605409+datadavev@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "naan_model"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pydantic = "^2.0.2"
+json-schema-for-humans = "^0.44.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
