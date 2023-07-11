@@ -2,32 +2,15 @@
 
 The ARK identifier NAAN model used by the registry and resolver services.
 
-For JSON-schema generation, `pydantic` is required:
-```
-pip install pydantic
-```
+Note: This model is currently (2023-07-11) a draft and is not deployed in production systems.
 
-The public view and full view have different schemas, they can be generated like:
-```
-$python naan_reg_json.py -s > schema/naan_schema.json
-```
-and
-```
-$python naan_reg_json.py -s -p > schema/public/naan_schema.json
-```
+This repository provides a model for ARK NAAN registry entries and includes the internal private view (with contact information) and a public view which excludes contact information from the model.
 
-Schema documentation can be generated if `json-schema-for-humans` is installed:
-```
-pip install json-schema-for-humans
-```
+The model is implemented using Python dataclasses form which a [JSON-Schema](https://json-schema.org/specification.html) is generated using [`pydantic`](https://docs.pydantic.dev/latest/usage/json_schema/). A markdown rendering of the schema is also generated using [`json-schema-for-humans`](https://github.com/coveooss/json-schema-for-humans).
 
-To generate the schema documentation:
-```
-generate-schema-doc --config-file docs_config.yaml ./schema/naan_schema.json ./schema/
-generate-schema-doc --config-file docs_config.yaml --config template_name=md ./schema/naan_schema.json ./schema/
-generate-schema-doc --config-file docs_config.yaml ./schema/public/naan_schema.json ./schema/public/
-generate-schema-doc --config-file docs_config.yaml --config template_name=md ./schema/public/naan_schema.json ./schema/public/
-```
+The python code is located in the [`naan_model`](./naan_model) package, and the generated JSON-schema and markdown are located in the [`schema/`](./schema) folder.
+
+
 
 ## Acknowledgement
 

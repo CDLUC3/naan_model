@@ -13,8 +13,6 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "pydantic",
-    "json-schema-for-humans",
 ]
 dynamic = ["version"]
 
