@@ -72,7 +72,7 @@
 | **Required** | Yes      |
 
 
-**Description:** The NAAN value, e.g. 12345
+**Description:** The NAAN value, e.g. 12345 as a string.
 
 
 
@@ -123,7 +123,7 @@
 | **Additional properties** | [[Any type: allowed]](# "Additional Properties of any type are allowed.") |
 
 
-**Description:** Dict of media-type = URL of service endpoints accepting ARK identifiers including subsitution parameters $arkpid for full ARK or $pid for NAAN/suffix. A key of 'DEFAULTis used if no other keys match a requested media-type.
+**Description:** Dict of media-type = URL of service endpoints accepting ARK identifiers including substitution parameters `$arkpid` for full ARK or `$pid` for NAAN/suffix. A key of `DEFAULT`is used if no other keys match a requested media-type.
 
 
 
@@ -648,4 +648,4 @@ CC = A check character is generated in assigned identifiers to guard
 
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2023-07-11 at 10:45:44 -0400
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2023-07-11 at 10:54:22 -0400

@@ -141,7 +141,7 @@
   },
   "properties": {
     "what": {
-      "description": "The NAAN value, e.g. 12345",
+      "description": "The NAAN value, e.g. 12345 as a string.",
       "title": "What",
       "type": "string"
     },
@@ -151,7 +151,7 @@
       "type": "string"
     },
     "target": {
-      "description": "Dict of media-type = URL of service endpoints accepting ARK identifiers including subsitution parameters $arkpid for full ARK or $pid for NAAN/suffix. A key of 'DEFAULTis used if no other keys match a requested media-type.",
+      "description": "Dict of media-type = URL of service endpoints accepting ARK identifiers including substitution parameters `$arkpid` for full ARK or `$pid` for NAAN/suffix. A key of `DEFAULT`is used if no other keys match a requested media-type.",
       "title": "Target",
       "type": "object"
     },
