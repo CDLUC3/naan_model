@@ -10,6 +10,7 @@ import naan_model
 
 test_data = [
     (
+        naan_model.PublicNAAN,
         naan_model.PublicNAAN(
             what="12345",
             where="https://example.net/",
@@ -47,15 +48,15 @@ test_data = [
     )
 ]
 
-@pytest.mark.parametrize("A,B", test_data)
-def test_public_json_out(A, B):
+@pytest.mark.parametrize("mclass,A,B", test_data)
+def test_public_json_out(mclass, A, B):
     # Convert input public model to JSON
-    json_data = pydantic.RootModel[naan_model.PublicNAAN](A).model_dump_json()
+    json_data = pydantic.RootModel[mclass](A).model_dump_json()
     # Compare de-serialized JSON
     assert json.loads(json_data) == json.loads(B)
 
-@pytest.mark.parametrize("A,B", test_data)
-def test_public_json_in(A, B):
-    adapter = pydantic.TypeAdapter(naan_model.PublicNAAN)
+@pytest.mark.parametrize("mclass,A,B", test_data)
+def test_public_json_in(mclass, A, B):
+    adapter = pydantic.TypeAdapter(mclass)
     parsed = adapter.validate_json(B)
     assert A == parsed

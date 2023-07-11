@@ -86,7 +86,7 @@ class NAAN_contact:
 @dataclasses.dataclass
 class PublicNAAN:
     what: str = dataclasses.field(
-        metadata=dict(description="The NAAN value, e.g. 12345")
+        metadata=dict(description="The NAAN value, e.g. 12345 as a string.")
     )
     where: str = dataclasses.field(
         metadata=dict(description="URL of service endpoint accepting ARK identifiers.")
@@ -95,7 +95,7 @@ class PublicNAAN:
         metadata=dict(
             description=(
                 "Dict of media-type = URL of service endpoints accepting ARK identifiers including "
-                "subsitution parameters $arkpid for full ARK or $pid for NAAN/suffix. A key of 'DEFAULT"
+                "substitution parameters `$arkpid` for full ARK or `$pid` for NAAN/suffix. A key of `DEFAULT`"
                 "is used if no other keys match a requested media-type."
             )
         )
