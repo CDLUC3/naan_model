@@ -79,9 +79,9 @@
       "type": "string"
     },
     "target": {
-      "description": "URL of service endpoint accepting ARK identifiers including subsitutionparameters $arkpid for full ARK or $pid for NAAN/suffix.",
+      "description": "Dict of media-type = URL of service endpoints accepting ARK identifiers including subsitution parameters $arkpid for full ARK or $pid for NAAN/suffix. A key of 'DEFAULTis used if no other keys match a requested media-type.",
       "title": "Target",
-      "type": "string"
+      "type": "object"
     },
     "when": {
       "description": "Date when this record was last modified.",
@@ -95,6 +95,17 @@
     "na_policy": {
       "$ref": "#/$defs/NAAN_how"
     },
+    "alternate_who": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PublicNAAN_who"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
     "test_identifier": {
       "default": null,
       "description": "A specific, concrete ARK that you plan to support and that you will permit us touse periodically for testing service availability.",
@@ -102,10 +113,17 @@
       "type": "string"
     },
     "service_provider": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
       "default": null,
       "description": "A \"service provider\" is different from the NAAN holder organization. It provides technical assistance to the the NAAN organization such as content hosting, access, discovery, etc.",
-      "title": "Service Provider",
-      "type": "string"
+      "title": "Service Provider"
     },
     "purpose": {
       "default": "unspecified",

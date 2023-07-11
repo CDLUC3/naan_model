@@ -16,9 +16,14 @@
   - [6.4. Property `PublicNAAN > na_policy > policy_url`](#na_policy_policy_url)
     - [6.4.1. Property `PublicNAAN > na_policy > policy_url > anyOf > item 0`](#na_policy_policy_url_anyOf_i0)
     - [6.4.2. Property `PublicNAAN > na_policy > policy_url > anyOf > item 1`](#na_policy_policy_url_anyOf_i1)
-- [7. Property `PublicNAAN > test_identifier`](#test_identifier)
-- [8. Property `PublicNAAN > service_provider`](#service_provider)
-- [9. Property `PublicNAAN > purpose`](#purpose)
+- [7. Property `PublicNAAN > alternate_who`](#alternate_who)
+  - [7.1. Property `PublicNAAN > alternate_who > anyOf > PublicNAAN_who`](#alternate_who_anyOf_i0)
+  - [7.2. Property `PublicNAAN > alternate_who > anyOf > item 1`](#alternate_who_anyOf_i1)
+- [8. Property `PublicNAAN > test_identifier`](#test_identifier)
+- [9. Property `PublicNAAN > service_provider`](#service_provider)
+  - [9.1. Property `PublicNAAN > service_provider > anyOf > item 0`](#service_provider_anyOf_i0)
+  - [9.2. Property `PublicNAAN > service_provider > anyOf > item 1`](#service_provider_anyOf_i1)
+- [10. Property `PublicNAAN > purpose`](#purpose)
 
 
 
@@ -34,17 +39,18 @@
 
 
 
-| Property                                 | Pattern | Type   | Deprecated | Definition                | Title/Description |
-| ---------------------------------------- | ------- | ------ | ---------- | ------------------------- | ----------------- |
-| + [what](#what )                         | No      | string | No         | -                         | What              |
-| + [where](#where )                       | No      | string | No         | -                         | Where             |
-| + [target](#target )                     | No      | string | No         | -                         | Target            |
-| + [when](#when )                         | No      | string | No         | -                         | When              |
-| + [who](#who )                           | No      | object | No         | In #/$defs/PublicNAAN_who | -                 |
-| + [na_policy](#na_policy )               | No      | object | No         | In #/$defs/NAAN_how       | -                 |
-| - [test_identifier](#test_identifier )   | No      | string | No         | -                         | Test Identifier   |
-| - [service_provider](#service_provider ) | No      | string | No         | -                         | Service Provider  |
-| - [purpose](#purpose )                   | No      | string | No         | -                         | Purpose           |
+| Property                                 | Pattern | Type        | Deprecated | Definition                | Title/Description |
+| ---------------------------------------- | ------- | ----------- | ---------- | ------------------------- | ----------------- |
+| + [what](#what )                         | No      | string      | No         | -                         | What              |
+| + [where](#where )                       | No      | string      | No         | -                         | Where             |
+| + [target](#target )                     | No      | object      | No         | -                         | Target            |
+| + [when](#when )                         | No      | string      | No         | -                         | When              |
+| + [who](#who )                           | No      | object      | No         | In #/$defs/PublicNAAN_who | -                 |
+| + [na_policy](#na_policy )               | No      | object      | No         | In #/$defs/NAAN_how       | -                 |
+| - [alternate_who](#alternate_who )       | No      | Combination | No         | -                         | -                 |
+| - [test_identifier](#test_identifier )   | No      | string      | No         | -                         | Test Identifier   |
+| - [service_provider](#service_provider ) | No      | Combination | No         | -                         | Service Provider  |
+| - [purpose](#purpose )                   | No      | string      | No         | -                         | Purpose           |
 
 
 
@@ -110,13 +116,14 @@
 
 **Title:** Target
 
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | Yes      |
+|                           |                                                                           |
+| ------------------------- | ------------------------------------------------------------------------- |
+| **Type**                  | `object`                                                                  |
+| **Required**              | Yes                                                                       |
+| **Additional properties** | [[Any type: allowed]](# "Additional Properties of any type are allowed.") |
 
 
-**Description:** URL of service endpoint accepting ARK identifiers including subsitutionparameters $arkpid for full ARK or $pid for NAAN/suffix.
+**Description:** Dict of media-type = URL of service endpoints accepting ARK identifiers including subsitution parameters $arkpid for full ARK or $pid for NAAN/suffix. A key of 'DEFAULTis used if no other keys match a requested media-type.
 
 
 
@@ -462,7 +469,68 @@ CC = A check character is generated in assigned identifiers to guard
 
 
 
-## <a name="test_identifier"></a>7. Property `PublicNAAN > test_identifier`
+## <a name="alternate_who"></a>7. Property `PublicNAAN > alternate_who`
+
+
+
+
+
+|                           |                                                                           |
+| ------------------------- | ------------------------------------------------------------------------- |
+| **Type**                  | `combining`                                                               |
+| **Required**              | No                                                                        |
+| **Additional properties** | [[Any type: allowed]](# "Additional Properties of any type are allowed.") |
+| **Default**               | `null`                                                                    |
+
+
+
+
+
+
+| Any of(Option)                            |
+| ----------------------------------------- |
+| [PublicNAAN_who](#alternate_who_anyOf_i0) |
+| [item 1](#alternate_who_anyOf_i1)         |
+
+
+### <a name="alternate_who_anyOf_i0"></a>7.1. Property `PublicNAAN > alternate_who > anyOf > PublicNAAN_who`
+
+
+|                           |                                                                           |
+| ------------------------- | ------------------------------------------------------------------------- |
+| **Type**                  | `object`                                                                  |
+| **Required**              | No                                                                        |
+| **Additional properties** | [[Any type: allowed]](# "Additional Properties of any type are allowed.") |
+| **Same definition as**    | [who](#who)                                                               |
+
+
+
+
+### <a name="alternate_who_anyOf_i1"></a>7.2. Property `PublicNAAN > alternate_who > anyOf > item 1`
+
+
+|              |        |
+| ------------ | ------ |
+| **Type**     | `null` |
+| **Required** | No     |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## <a name="test_identifier"></a>8. Property `PublicNAAN > test_identifier`
 
 
 
@@ -488,18 +556,19 @@ CC = A check character is generated in assigned identifiers to guard
 
 
 
-## <a name="service_provider"></a>8. Property `PublicNAAN > service_provider`
+## <a name="service_provider"></a>9. Property `PublicNAAN > service_provider`
 
 
 
 
 **Title:** Service Provider
 
-|              |          |
-| ------------ | -------- |
-| **Type**     | `string` |
-| **Required** | No       |
-| **Default**  | `null`   |
+|                           |                                                                           |
+| ------------------------- | ------------------------------------------------------------------------- |
+| **Type**                  | `combining`                                                               |
+| **Required**              | No                                                                        |
+| **Additional properties** | [[Any type: allowed]](# "Additional Properties of any type are allowed.") |
+| **Default**               | `null`                                                                    |
 
 
 **Description:** A "service provider" is different from the NAAN holder organization. It provides technical assistance to the the NAAN organization such as content hosting, access, discovery, etc.
@@ -507,6 +576,19 @@ CC = A check character is generated in assigned identifiers to guard
 
 
 
+| Any of(Option)                       |
+| ------------------------------------ |
+| [item 0](#service_provider_anyOf_i0) |
+| [item 1](#service_provider_anyOf_i1) |
+
+
+### <a name="service_provider_anyOf_i0"></a>9.1. Property `PublicNAAN > service_provider > anyOf > item 0`
+
+
+|              |          |
+| ------------ | -------- |
+| **Type**     | `string` |
+| **Required** | No       |
 
 
 
@@ -514,7 +596,33 @@ CC = A check character is generated in assigned identifiers to guard
 
 
 
-## <a name="purpose"></a>9. Property `PublicNAAN > purpose`
+
+
+### <a name="service_provider_anyOf_i1"></a>9.2. Property `PublicNAAN > service_provider > anyOf > item 1`
+
+
+|              |        |
+| ------------ | ------ |
+| **Type**     | `null` |
+| **Required** | No     |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## <a name="purpose"></a>10. Property `PublicNAAN > purpose`
 
 
 
@@ -540,4 +648,4 @@ CC = A check character is generated in assigned identifiers to guard
 
 
 ----------------------------------------------------------------------------------------------------------------------------
-Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2023-07-11 at 08:52:15 -0400
+Generated using [json-schema-for-humans](https://github.com/coveooss/json-schema-for-humans) on 2023-07-11 at 10:45:44 -0400
