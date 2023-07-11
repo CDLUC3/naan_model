@@ -3,7 +3,7 @@
 The ARK identifier NAAN model used by the registry and resolver services.
 
 > **Note** 
-> :information_source: (2023-07-11) This model is currently a draft and is not deployed in production systems.
+> (2023-07-11) This model is currently a draft and is not deployed in production systems.
 
 This repository provides a model for ARK NAAN registry entries and includes the internal private view (with contact information) and a public view which excludes contact information from the model.
 

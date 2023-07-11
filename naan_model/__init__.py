@@ -2,6 +2,7 @@ import dataclasses
 import datetime
 import typing
 
+
 @dataclasses.dataclass
 class PublicNAAN_who:
     """Publicly visible information for organization responsible for NAAN"""
@@ -90,11 +91,12 @@ class PublicNAAN:
     where: str = dataclasses.field(
         metadata=dict(description="URL of service endpoint accepting ARK identifiers.")
     )
-    target: str = dataclasses.field(
+    target: typing.Dict = dataclasses.field(
         metadata=dict(
             description=(
-                "URL of service endpoint accepting ARK identifiers including subsitution"
-                "parameters $arkpid for full ARK or $pid for NAAN/suffix."
+                "Dict of media-type = URL of service endpoints accepting ARK identifiers including "
+                "subsitution parameters $arkpid for full ARK or $pid for NAAN/suffix. A key of 'DEFAULT"
+                "is used if no other keys match a requested media-type."
             )
         )
     )
@@ -103,6 +105,7 @@ class PublicNAAN:
     )
     who: PublicNAAN_who
     na_policy: NAAN_how
+    alternate_who: typing.Optional[PublicNAAN_who] = None
     test_identifier: str = dataclasses.field(
         default=None,
         metadata=dict(
@@ -110,9 +113,9 @@ class PublicNAAN:
                 "A specific, concrete ARK that you plan to support and that you will permit us to"
                 "use periodically for testing service availability."
             )
-        )
+        ),
     )
-    service_provider: str = dataclasses.field(
+    service_provider: typing.Optional[str] = dataclasses.field(
         default=None,
         metadata=dict(
             description=(
@@ -120,7 +123,7 @@ class PublicNAAN:
                 "technical assistance to the the NAAN organization such as content hosting, access, "
                 "discovery, etc."
             )
-        )
+        ),
     )
     purpose: str = dataclasses.field(
         default="unspecified",
@@ -139,7 +142,7 @@ class PublicNAAN:
                 "other; "
                 "unspecified; "
             )
-        )
+        ),
     )
 
     def as_flat(self) -> dict:
@@ -155,11 +158,11 @@ class PublicNAAN:
 class NAAN(PublicNAAN):
     who: NAAN_who
     why: str = dataclasses.field(
-        default='ARK',
-        metadata=dict(description="Purpose for this record, 'ARK'")
+        default="ARK", metadata=dict(description="Purpose for this record, 'ARK'")
     )
-    contact: NAAN_contact=None
-    alternate_contact: NAAN_contact=None
+    alternate_who: typing.Optional[NAAN_who] = None
+    contact: typing.Optional[NAAN_contact] = None
+    alternate_contact: typing.Optional[NAAN_contact] = None
     comments: typing.Optional[typing.List[dict]] = dataclasses.field(
         default=None, metadata=dict(description="Comments about NAAN record")
     )
@@ -173,9 +176,21 @@ class NAAN(PublicNAAN):
 
     def as_public(self) -> PublicNAAN:
         public_who = PublicNAAN_who(self.who.name, self.who.acronym)
+        public_alt_who = (
+            None
+            if self.alternate_who is None
+            else PublicNAAN_who(self.alternate_who.name, self.alternate_who.acronym)
+        )
         public = PublicNAAN(
-            self.what, self.where, self.target, self.when, public_who, self.na_policy,
-            self.test_identifier, self.service_provider, self.purpose
+            self.what,
+            self.where,
+            self.target,
+            self.when,
+            public_who,
+            self.na_policy,
+            public_alt_who,
+            self.test_identifier,
+            self.service_provider,
+            self.purpose,
         )
         return public
-
