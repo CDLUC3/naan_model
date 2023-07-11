@@ -56,11 +56,11 @@ def main() -> int:
         footer_show_time=True
     )
     for dest_dir in (private_dir, public_dir,):
-        #json_schema_for_humans.generate.generate_from_filename(
-        #    os.path.join(dest_dir, "schema.json"),
-        #    os.path.join(dest_dir, "index.html"),
-        #    config=docs_config_html
-        #)
+        json_schema_for_humans.generate.generate_from_filename(
+            os.path.join(dest_dir, "schema.json"),
+            os.path.join(dest_dir, "index.html"),
+            config=docs_config_html
+        )
         json_schema_for_humans.generate.generate_from_filename(
             os.path.join(dest_dir, "schema.json"),
             os.path.join(dest_dir, "schema.md"),
