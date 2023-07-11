@@ -1,0 +1,127 @@
+{
+  "$defs": {
+    "NAAN_how": {
+      "properties": {
+        "orgtype": {
+          "description": "Organization type, FP = For profit, NP = Not for profit.",
+          "title": "Orgtype",
+          "type": "string"
+        },
+        "policy": {
+          "description": "Which practices do you plan to implement when you assign the base name of your ARKs? The ARK base name is between your NAAN and any suffix; for example, in ark:12345/x6np1wh8k/c3.xsl the base name is x6np1wh8k. This information can help others make the best use of your ARKs. Please submit updates as your practices evolve. \n'''\nNR = No re-assignment. Once a base identifier-to-object association\n     has been made public, that association shall remain unique into\n     the indefinite future.\nOP = Opacity. Base identifiers shall be assigned with no widely\n     recognizable semantic information.\nCC = A check character is generated in assigned identifiers to guard\n     against common transcription errors.\n'''\n",
+          "title": "Policy",
+          "type": "string"
+        },
+        "tenure": {
+          "description": "<start year YYYY of role tenure>[-<end of tenure> ]",
+          "title": "Tenure",
+          "type": "string"
+        },
+        "policy_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to narrative policy statement",
+          "title": "Policy Url"
+        }
+      },
+      "required": [
+        "orgtype",
+        "policy",
+        "tenure"
+      ],
+      "title": "NAAN_how",
+      "type": "object"
+    },
+    "PublicNAAN_who": {
+      "properties": {
+        "name": {
+          "description": "Official organization name",
+          "title": "Name",
+          "type": "string"
+        },
+        "acronym": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional display acronym derived from DNS name",
+          "title": "Acronym"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "PublicNAAN_who",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "what": {
+      "description": "The NAAN value, e.g. 12345",
+      "title": "What",
+      "type": "string"
+    },
+    "where": {
+      "description": "URL of service endpoint accepting ARK identifiers.",
+      "title": "Where",
+      "type": "string"
+    },
+    "target": {
+      "description": "URL of service endpoint accepting ARK identifiers including subsitutionparameters $arkpid for full ARK or $pid for NAAN/suffix.",
+      "title": "Target",
+      "type": "string"
+    },
+    "when": {
+      "description": "Date when this record was last modified.",
+      "format": "date-time",
+      "title": "When",
+      "type": "string"
+    },
+    "who": {
+      "$ref": "#/$defs/PublicNAAN_who"
+    },
+    "na_policy": {
+      "$ref": "#/$defs/NAAN_how"
+    },
+    "test_identifier": {
+      "default": null,
+      "description": "A specific, concrete ARK that you plan to support and that you will permit us touse periodically for testing service availability.",
+      "title": "Test Identifier",
+      "type": "string"
+    },
+    "service_provider": {
+      "default": null,
+      "description": "A \"service provider\" is different from the NAAN holder organization. It provides technical assistance to the the NAAN organization such as content hosting, access, discovery, etc.",
+      "title": "Service Provider",
+      "type": "string"
+    },
+    "purpose": {
+      "default": "unspecified",
+      "description": "What are you planning to assign ARKs to using the requested NAAN?Options: documents(text or page images, eg, journal articles, technical reports); audio - and / or video - based objects; non-text, non-audio / visual documents(eg, maps, posters, musical scores); datasets (eg, spreadsheets, collections of spreadsheets); records (eg, bibliographic records, archival finding aids); physical objects(eg, fine art, archaeological artifacts, scientific samples)concepts (eg, vocabulary terms, disease codes); agents (people, groups, and institutions as actors, eg, creators, contributors, publishers, performers, etc); other; unspecified; ",
+      "title": "Purpose",
+      "type": "string"
+    }
+  },
+  "required": [
+    "what",
+    "where",
+    "target",
+    "when",
+    "who",
+    "na_policy"
+  ],
+  "title": "PublicNAAN",
+  "type": "object"
+}
