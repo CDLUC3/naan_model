@@ -383,6 +383,17 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "py2puml"
+version = "0.7.2"
+description = "Generate PlantUML class diagrams to document your Python application."
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "py2puml-0.7.2-py3-none-any.whl", hash = "sha256:1579a2adbb05b32203729bbca5b1a4c491802231f0d48559d3ca69fb96624d26"},
+    {file = "py2puml-0.7.2.tar.gz", hash = "sha256:d655c5a5267677225d225297abde6df883d87551cb853426a502e2d4143609b3"},
+]
+
+[[package]]
 name = "pydantic"
 version = "2.0.2"
 description = "Data validation using Python type hints"
@@ -688,4 +699,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "8c99deefe28a5c5dde640c391137675f16726a7967c1bb688e8d76e2adf79665"
+content-hash = "459f97fcc854dbaf465682993f377f1f20859beddf16ade30b7dbc6751bf8e93"
