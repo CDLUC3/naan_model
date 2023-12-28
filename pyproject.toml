@@ -33,9 +33,9 @@ packages = [{include = "naan_model"}]
 python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-pydantic = "^2.0.2"
-json-schema-for-humans = "^0.44.5"
+pytest = "^7.4.3"
+pydantic = "^2.5.3"
+json-schema-for-humans = "^0.47"
 
 [build-system]
 requires = ["poetry-core"]
