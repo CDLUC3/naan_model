@@ -1,7 +1,15 @@
 import dataclasses
 import datetime
+import json
 import typing
 
+class EnhancedJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime.datetime):
+            return o.isoformat(timespec='seconds').replace("+00:00", "Z")
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
 
 @dataclasses.dataclass
 class PublicNAAN_who:
@@ -15,14 +23,33 @@ class PublicNAAN_who:
         metadata=dict(description="Optional display acronym derived from DNS name"),
     )
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "PublicNAAN_who":
+        name = data.get("name", None)
+        if name is None:
+            raise ValueError(f"name is required for PublicNAAN_who")
+        return cls(
+            name=data.get("name"),
+            acronym=data.get("acronym", None)
+        )
+
 
 @dataclasses.dataclass
 class NAAN_who(PublicNAAN_who):
     """Organization responsible for NAAN"""
 
-    address: str = dataclasses.field(
+    address: typing.Optional[str] = dataclasses.field(
         default=None, metadata=dict(description="Physical address of organization")
     )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "NAAN_who":
+        public_who = super(NAAN_who, cls).from_dict(data)
+        return cls(
+            name=public_who.name,
+            acronym=public_who.acronym,
+            address=data.get("address", None)
+        )
 
 
 @dataclasses.dataclass
@@ -62,6 +89,24 @@ class NAAN_how:
         default=None, metadata=dict(description="URL to narrative policy statement")
     )
 
+    @classmethod
+    def from_dict(cls, data: dict) -> 'NAAN_how':
+        orgtype = data.get("orgtype")
+        if orgtype is None:
+            raise ValueError("orgtype is required for NAAN_how")
+        policy = data.get("policy")
+        if policy is None:
+            raise ValueError("policy is required for NAAN_how")
+        tenure = data.get("tenure")
+        if tenure is None:
+            raise ValueError("tenure is required for NAAN_how")
+        return NAAN_how(
+            orgtype=orgtype,
+            policy=policy,
+            tenure=tenure,
+            policy_url=data.get("policy_url", None)
+        )
+
 
 @dataclasses.dataclass
 class NAAN_contact:
@@ -82,6 +127,51 @@ class NAAN_contact:
         default=None, metadata=dict(description="Telephone number for contact")
     )
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "NAAN_contact":
+        name = data.get("name")
+        if name is None:
+            raise ValueError("name is required for NAAN_contact")
+        return NAAN_contact(
+            name=name,
+            unit=data.get("unit", None),
+            tenure=data.get("tenure", None),
+            email=data.get("email", None),
+            phone=data.get("phone", None)
+        )
+
+
+@dataclasses.dataclass
+class Target:
+    url_template: str = dataclasses.field(
+        metadata=dict(
+            description="A URL template that will be used to form the redirect target for matching identifiers.")
+    )
+    redirect_code: int = dataclasses.field(
+        default=301,
+        metadata=dict(description="The HTTP status code that will be used to redirect requests.")
+    )
+    media_type: typing.Optional[str] = dataclasses.field(
+        default=None,
+        metadata=dict(description="IANA media type for this this target will be used.")
+    )
+
+    def __post_init__(self):
+        for field in dataclasses.fields(self):
+            if not isinstance(field.default, dataclasses._MISSING_TYPE) and getattr(self, field.name) is None:
+                setattr(self, field.name, field.default)
+
+    @classmethod
+    def from_dict(cls, data:dict) -> "Target":
+        url_template = data.get("url_template")
+        if url_template is None:
+            raise ValueError("url_template is required for Target")
+        return Target(
+            url_template=url_template,
+            redirect_code=data.get("redirect_code"),
+            media_type=data.get("media_type", None)
+        )
+
 
 @dataclasses.dataclass
 class PublicNAAN:
@@ -91,12 +181,11 @@ class PublicNAAN:
     where: str = dataclasses.field(
         metadata=dict(description="URL of service endpoint accepting ARK identifiers.")
     )
-    target: typing.Dict = dataclasses.field(
+    target: typing.List[Target] = dataclasses.field(
         metadata=dict(
             description=(
-                "Dict of media-type = URL of service endpoints accepting ARK identifiers including "
-                "substitution parameters `$arkpid` for full ARK or `$pid` for NAAN/suffix. A key of `DEFAULT`"
-                "is used if no other keys match a requested media-type."
+                "List of Targets that define the redirect location and status code for "
+                "a media_type"
             )
         )
     )
@@ -110,7 +199,7 @@ class PublicNAAN:
         default=None,
         metadata=dict(
             description=(
-                "A specific, concrete ARK that you plan to support and that you will permit us to"
+                "A specific, concrete ARK that you plan to support and that you will permit us to "
                 "use periodically for testing service availability."
             )
         ),
@@ -145,6 +234,13 @@ class PublicNAAN:
         ),
     )
 
+    def __post_init__(self):
+        for field in dataclasses.fields(self):
+            # If there is a default and the value of the field is none we can assign a value
+            if not isinstance(field.default, dataclasses._MISSING_TYPE) and getattr(self, field.name) is None:
+                setattr(self, field.name, field.default)
+
+
     def as_flat(self) -> dict:
         return {
             "what": self.what,
@@ -152,6 +248,36 @@ class PublicNAAN:
             "where": self.where,
             "when": self.when,
         }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "PublicNAAN":
+        who = PublicNAAN_who.from_dict(data.get('who', {}))
+        na_policy = NAAN_how.from_dict(data.get('na_policy', {}))
+        alternate_who = None
+        a_data = data.get("alternate_who", None)
+        if a_data is not None:
+            alternate_who = PublicNAAN_who.from_dict(a_data)
+        target = []
+        t_data = data.get("target", None)
+        if isinstance(t_data, dict):
+            target = [Target.from_dict(data.get("target", {})), ]
+        elif isinstance(t_data, list):
+            for t in t_data:
+                target.append(Target.from_dict(t))
+        when = data.get("when", "")
+        when = datetime.datetime.strptime(when, "%Y-%m-%dT%H:%M:%S%z")
+        return PublicNAAN(
+            what=data.get("what"),
+            where=data.get("where"),
+            target=target,
+            when=when,
+            who=who,
+            na_policy=na_policy,
+            alternate_who=alternate_who,
+            test_identifier=data.get("test_identifier"),
+            service_provider=data.get("service_provider"),
+            purpose=data.get("purpose")
+        )
 
 
 @dataclasses.dataclass
@@ -194,3 +320,44 @@ class NAAN(PublicNAAN):
             self.purpose,
         )
         return public
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "NAAN":
+        who = NAAN_who.from_dict(data.get('who', {}))
+        na_policy = NAAN_how.from_dict(data.get('na_policy', {}))
+        alternate_who = None
+        a_data = data.get("alternate_who", None)
+        if a_data is not None:
+            alternate_who = PublicNAAN_who.from_dict(a_data)
+        target = []
+        t_data = data.get("target", None)
+        if isinstance(t_data, dict):
+            target = [Target.from_dict(data.get("target", {})), ]
+        elif isinstance(t_data, list):
+            for t in t_data:
+                target.append(Target.from_dict(t))
+        when = data.get("when", "")
+        when = datetime.datetime.strptime(when, "%Y-%m-%dT%H:%M:%S%z")
+        return NAAN(
+            what=data.get("what"),
+            where=data.get("where"),
+            target=target,
+            when=when,
+            who=who,
+            na_policy=na_policy,
+            alternate_who=alternate_who,
+            test_identifier=data.get("test_identifier"),
+            service_provider=data.get("service_provider"),
+            purpose=data.get("purpose")
+        )
+
+
+def naan_record_from_json(data:typing.Union[str, dict]) -> NAAN:
+    if isinstance(data, str):
+        data = json.loads(data)
+    return NAAN.from_dict(data)
+
+
+def naan_record_to_json(naan:typing.Union[NAAN, PublicNAAN], **kwparams) -> str:
+    kwparams["cls"] = EnhancedJSONEncoder
+    return json.dumps(naan, **kwparams)

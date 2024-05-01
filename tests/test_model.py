@@ -14,7 +14,13 @@ test_data = [
         naan_model.PublicNAAN(
             what="12345",
             where="https://example.net/",
-            target={"DEFAULT": "https://example.net/$arkpid"},
+            target=[
+                naan_model.Target(
+                    url_template="https://example.net/$arkpid",
+                    redirect_code=301,
+                    media_type=None
+                ),
+            ],
             when=datetime.datetime(2023, 7, 11, 6, 30, 00, tzinfo=datetime.UTC),
             who=naan_model.PublicNAAN_who(
                 name="Dave",
@@ -33,7 +39,13 @@ test_data = [
         json.dumps({
             "what": "12345",
             "where": "https://example.net/",
-            "target": {"DEFAULT": "https://example.net/$arkpid"},
+            "target": [
+                {
+                    "url_template": "https://example.net/$arkpid",
+                    "redirect_code": 301,
+                    "media_type": None
+                },
+            ],
             "when": "2023-07-11T06:30:00Z",
             "who": {
                 "name": "Dave",
@@ -55,8 +67,23 @@ def test_public_json_out(mclass, A, B):
     # Compare de-serialized JSON
     assert json.loads(json_data) == json.loads(B)
 
+
 @pytest.mark.parametrize("mclass,A,B", test_data)
 def test_public_json_in(mclass, A, B):
     adapter = pydantic.TypeAdapter(mclass)
     parsed = adapter.validate_json(B)
     assert A == parsed
+
+
+@pytest.mark.parametrize("mclass,A,B", test_data)
+def test_load_json(mclass, A, B):
+    parsed = naan_model.naan_record_from_json(B)
+    assert parsed.__class__ == naan_model.NAAN
+    pub = parsed.as_public()
+    assert pub.__class__ == naan_model.PublicNAAN
+    assert pub == A
+
+@pytest.mark.parametrize("mclass,A,B", test_data)
+def test_load_json_in(mclass, A, B):
+    serialized = naan_model.naan_record_to_json(A)
+    assert serialized == B
