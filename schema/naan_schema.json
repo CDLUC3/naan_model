@@ -1,0 +1,340 @@
+{
+  "$id":"https://n2t.net/ark:66013/schema/naan/1.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "shoulder": {
+      "type": "string"
+    },
+    "naan": {
+      "type": "string"
+    },
+    "what": {
+      "type": "string"
+    },
+    "who": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description":"The name of the memory organization that is primarily responsible for the objects to which ARK identifiers will be assigned. If you are a publisher requesting a NAAN, you may enter the name of a journal."
+        },
+        "name_native": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "acronym": {
+          "type": "string",
+          "description":"Preferred or assigned acronym."
+        },
+        "location": {
+          "description": "Longitude, latitude in WGS84 decimal degrees.",
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "prefixItems": [
+                {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                },
+                {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                }
+              ],
+              "items": {
+                "type": "number"
+              }
+            }
+          ]
+        },
+        "address": {
+          "anyOf": [
+            {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Physical or street address of the memory organization."
+        }
+      },
+      "required": [
+        "acronym",
+        "address",
+        "name",
+        "name_native"
+      ]
+    },
+    "where": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL for additional information about the target."
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://",
+          "description": "The target address pattern."
+        },
+        "http_code": {
+          "type": "integer",
+          "enum": [200, 301, 302, 303, 307, 308, 401, 403, 404 ],
+          "description": "Resolver response HTTP status code, usually 302."
+        }
+      },
+      "required": [
+        "http_code",
+        "url"
+      ]
+    },
+    "when": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Record creation timestamp in RFC 3339 format."      
+    },
+    "na_policy": {
+      "type": "object",
+      "properties": {
+        "orgtype": {
+          "enum": ["FP", "NP"],
+          "description":"Organization tax status For Profit (FP) or Not For Profit (NP)"
+        },
+        "policy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "tenure": {
+          "type": "string"
+        },
+        "policy_url": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "uri"
+        }
+      },
+      "required": [
+        "orgtype",
+        "policy",
+        "policy_url",
+        "tenure"
+      ]
+    },
+    "test_identifier": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "rtype": {
+      "enum": ["NAAN", "NAANShoulder"]
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "unit": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "tenure": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "email": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "email"
+        },
+        "phone": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "required": [
+        "email",
+        "name",
+        "phone",
+        "tenure",
+        "unit"
+      ]
+    },
+    "alternate_contact": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": ["string", "null"]
+            },
+            "unit": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "tenure": {
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            "email": {
+              "type": ["string","null"]
+            },
+            "phone": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          },
+          "required": [
+            "email",
+            "name",
+            "phone",
+            "tenure",
+            "unit"
+          ]
+        }
+      ]
+    },
+    "comments": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "!#minter": {
+                "type": "string"
+              },
+              "!where": {
+                "type": "string"
+              },
+              "create": {
+                "type": "string"
+              },
+              "!#who": {
+                "type": "string"
+              },
+              "!xaddress": {
+                "type": "string"
+              },
+              "!what": {
+                "type": "string"
+              },
+              "!#where": {
+                "type": "string"
+              },
+              "!#contact": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "!": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "provider": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "service_provider": {
+      "type": ["null", "string"]
+    },
+    "purpose": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "why": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "alternate_contact",
+    "comments",
+    "contact",
+    "na_policy",
+    "provider",
+    "rtype",
+    "target",
+    "test_identifier",
+    "what",
+    "when",
+    "where",
+    "who"
+  ],
+  "if": {
+    "properties": {
+        "rtype": {
+            "const": "NAANShoulder"
+        }
+    },
+    "required": ["rtype"]
+  },
+  "then": {
+    "required": ["naan", "shoulder"]
+  }
+}
