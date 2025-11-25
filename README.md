@@ -1,15 +1,11 @@
 # naan_model
 
-The ARK identifier NAAN model used by the registry and resolver services.
+JSON schema and validator for ARK identifier NAAN and Shoulder records.
 
-> **Note** 
-> (2023-07-11) This model is currently a draft and is not deployed in production systems.
-
-This repository provides a model for ARK NAAN registry entries and includes the internal private view (with contact information) and a public view which excludes contact information from the model.
-
-The model is implemented using Python dataclasses form which a [JSON-Schema](https://json-schema.org/specification.html) is generated using [`pydantic`](https://docs.pydantic.dev/latest/usage/json_schema/). A markdown rendering of the schema is also generated using [`json-schema-for-humans`](https://github.com/coveooss/json-schema-for-humans).
-
-The python code is located in the [`naan_model`](./naan_model) package, and the generated JSON-schema and markdown are located in the [`schema/`](./schema) folder.
+This repository contains a JSON Schema document that can be used to validate the 
+structure of NAAN and Shoulder records maintained in the NAAN registry. Also 
+included is a python script to validate records and a utility for loading all
+records into a DuckDB instance to facilitate bulk analysis of the records.
 
 ## Acknowledgement
 
