@@ -1,15 +1,44 @@
 # naan_model
 
-The ARK identifier NAAN model used by the registry and resolver services.
+JSON schema and validator for ARK identifier NAAN and Shoulder records.
 
-> **Note** 
-> (2023-07-11) This model is currently a draft and is not deployed in production systems.
+This repository contains a JSON Schema document that can be used to validate the 
+structure of NAAN and Shoulder records maintained in the NAAN registry. Also 
+included is a python script to validate records and a utility for loading all
+records into a DuckDB instance to facilitate bulk analysis of the records.
 
-This repository provides a model for ARK NAAN registry entries and includes the internal private view (with contact information) and a public view which excludes contact information from the model.
+## Operation
 
-The model is implemented using Python dataclasses form which a [JSON-Schema](https://json-schema.org/specification.html) is generated using [`pydantic`](https://docs.pydantic.dev/latest/usage/json_schema/). A markdown rendering of the schema is also generated using [`json-schema-for-humans`](https://github.com/coveooss/json-schema-for-humans).
+The `validate.py` script evaluates one or more JSON records against the 
+`naan_schema.json` JSON schema document and reports on the outcome.
 
-The python code is located in the [`naan_model`](./naan_model) package, and the generated JSON-schema and markdown are located in the [`schema/`](./schema) folder.
+Validate a single file:
+```
+$ python validate.py  ../naan_reg_priv/naan_records/6/61910.json 
+INFO:validator:Record 61910 is valid.
+```
+
+Validate a folder (including sub-folders):
+```
+$ python validate.py -l INFO ../naan_reg_priv/naan_records/  
+INFO:validator:Record 99152/h3 is valid.
+INFO:validator:Record 99152/r5 is valid.
+INFO:validator:Record 99152/t8 is valid.
+...
+```
+
+The script will have an exit code indicative of the number of erroneous 
+documents. Hence, exit code 0 mean no errors, exit code 10 means 10 erroneous 
+documents.
+
+## Installation
+
+```
+export UV_PYTHON=3.12
+uv env .venv
+source .venv/bin/activate
+uv sync
+```
 
 ## Acknowledgement
 
